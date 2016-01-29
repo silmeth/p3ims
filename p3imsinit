@@ -1,0 +1,24 @@
+#!/usr/bin/python3
+
+from pymongo import MongoClient
+
+import sys, pprint, builtins
+
+
+def ppdisplayhook(value, bltins=builtins, disphook=pprint.pprint):
+  if value is not None:
+    bltins._ = value
+    disphook(value, indent=2)
+
+
+sys.displayhook = ppdisplayhook
+
+del pprint, sys, builtins, ppdisplayhook 
+
+c = MongoClient('localhost', 27017)
+
+print('Welcome to Pythonist’s Pretty-Printed Interactive Mongo Shell (p3ims) v0.0.\n\n'
+    + 'Type `c.database_names() to show all available databases.\n'
+    + 'Type `c = MongoClient(\'host\', port)` to connect to MongoDB on host:port.\n'
+    + 'Type `exit()` to exit.')
+
