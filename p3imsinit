@@ -3,17 +3,35 @@
 from pymongo import MongoClient
 
 import sys, pprint, builtins
+from pymongo.cursor import Cursor
 
 
-def ppdisplayhook(value, bltins=builtins, disphook=pprint.pprint):
+MAX_DISP_DOCS = 20
+
+def ppdisplayhook(value, bltins=builtins, disphook=pprint.pprint, cursor_type = Cursor):
   if value is not None:
     bltins._ = value
+    if type(value) == cursor_type:
+      new_value = list()
+      value = value.clone()
+      for val in value:
+        new_value.append(val)
+        if len(new_value) > MAX_DISP_DOCS:
+          break
+      value.close()
+      value = new_value
+      del new_value
+      if len(value) > MAX_DISP_DOCS:
+        disphook(value[:MAX_DISP_DOCS], indent=2)
+        print('\n\nOnly first ' + str(MAX_DISP_DOCS) + ' documents shown, use the `_` binding to fetch all of them.')
+        print('Use the `_.skip(n)` method to show to show next records.')
+        return
     disphook(value, indent=2)
-
 
 sys.displayhook = ppdisplayhook
 
-del pprint, sys, builtins, ppdisplayhook 
+del pprint, sys, builtins, ppdisplayhook, Cursor
+
 
 c = MongoClient('localhost', 27017)
 
