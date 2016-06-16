@@ -24,7 +24,7 @@ def ppdisplayhook(value, bltins=builtins, disphook=pprint.pprint, cursor_type = 
       if len(value) > MAX_DISP_DOCS:
         disphook(value[:MAX_DISP_DOCS], indent=2)
         print('\n\nOnly first ' + str(MAX_DISP_DOCS) + ' documents shown, use the `_` binding to fetch all of them.')
-        print('Use the `_.skip(n)` method to show to show next records.')
+        print('Use the `_.skip(n)` method to show next records.')
         return
     disphook(value, indent=2)
 
